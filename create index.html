@@ -1,1 +1,569 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kastanienbäume</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
 
+        body {
+            font-family: 'Georgia', serif;
+            background-color: #FAF3E8;
+            color: #3E2723;
+        }
+
+        header {
+            background: linear-gradient(135deg, #7D5A50 0%, #9A7B6A 100%);
+            padding: 60px 20px;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+            height: 250px;
+        }
+
+        h1 {
+            font-size: 3.5em;
+            color: #FFF8E1;
+            text-shadow: 3px 3px 6px rgba(0,0,0,0.3);
+            position: relative;
+            z-index: 10;
+        }
+
+        .falling-item {
+            position: absolute;
+            font-size: 30px;
+            animation: fall linear infinite;
+            opacity: 0.8;
+        }
+
+        @keyframes fall {
+            0% {
+                transform: translateY(-100px) rotate(0deg);
+                opacity: 0;
+            }
+            10% {
+                opacity: 0.8;
+            }
+            90% {
+                opacity: 0.8;
+            }
+            100% {
+                transform: translateY(350px) rotate(360deg);
+                opacity: 0;
+            }
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 40px auto;
+            padding: 0 20px;
+        }
+
+        .intro {
+            background-color: #B8956A;
+            color: #FFF8E1;
+            padding: 30px;
+            border-radius: 15px;
+            margin-bottom: 40px;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.15);
+        }
+
+        .intro h2 {
+            margin-bottom: 15px;
+            font-size: 2em;
+        }
+
+        .tree-card {
+            background-color: #B8956A;
+            color: #FFF8E1;
+            border-radius: 15px;
+            padding: 30px;
+            margin-bottom: 40px;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.15);
+        }
+
+        .tree-card h2 {
+            font-size: 2.2em;
+            margin-bottom: 20px;
+            border-bottom: 3px solid #FFF8E1;
+            padding-bottom: 10px;
+        }
+
+        .tree-content {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 30px;
+            margin-top: 20px;
+        }
+
+        .tree-info {
+            line-height: 1.8;
+        }
+
+        .tree-info h3 {
+            color: #FFE082;
+            margin-top: 20px;
+            margin-bottom: 10px;
+            font-size: 1.4em;
+        }
+
+        .tree-info ul {
+            list-style-position: inside;
+            margin-left: 10px;
+        }
+
+        .tree-info li {
+            margin-bottom: 8px;
+        }
+
+        .tree-images {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+        }
+
+        .image-box {
+            background-color: #A07D5A;
+            border-radius: 10px;
+            padding: 15px;
+            text-align: center;
+        }
+
+        .image-box h4 {
+            color: #FFE082;
+            margin-bottom: 10px;
+            font-size: 1.1em;
+        }
+
+        .image-description {
+            color: #FFF8E1;
+            font-size: 0.85em;
+            margin-top: 8px;
+            font-style: italic;
+            line-height: 1.4;
+        }
+
+        .svg-container {
+            background: #F5E6D3;
+            height: 150px;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+        }
+
+        .full-tree {
+            grid-column: 1 / -1;
+        }
+
+        .full-tree .svg-container {
+            height: 280px;
+        }
+
+        .data-table {
+            background-color: #A07D5A;
+            border-radius: 10px;
+            padding: 20px;
+            margin-top: 20px;
+        }
+
+        .data-table h3 {
+            color: #FFE082;
+            margin-bottom: 15px;
+        }
+
+        .data-row {
+            display: grid;
+            grid-template-columns: 150px 1fr;
+            padding: 8px 0;
+            border-bottom: 1px solid rgba(255, 248, 225, 0.2);
+        }
+
+        .data-row:last-child {
+            border-bottom: none;
+        }
+
+        .data-label {
+            font-weight: bold;
+            color: #FFE082;
+        }
+
+        footer {
+            background-color: #7D5A50;
+            color: #FFF8E1;
+            text-align: center;
+            padding: 20px;
+            margin-top: 60px;
+        }
+
+        /* Animationen für Rosskastanie */
+        @keyframes leafFloat1 {
+            0%, 100% { transform: translate(0, 0) rotate(0deg); }
+            25% { transform: translate(5px, -3px) rotate(5deg); }
+            50% { transform: translate(-3px, 2px) rotate(-3deg); }
+            75% { transform: translate(4px, -2px) rotate(4deg); }
+        }
+
+        @keyframes chestnutBounce1 {
+            0%, 100% { transform: translateY(0) rotate(0deg); }
+            50% { transform: translateY(-8px) rotate(180deg); }
+        }
+
+        @keyframes treeWind1 {
+            0%, 100% { transform: rotate(0deg); }
+            25% { transform: rotate(1deg); }
+            75% { transform: rotate(-1deg); }
+        }
+
+        /* Animationen für Rotblühende Rosskastanie */
+        @keyframes leafFloat2 {
+            0%, 100% { transform: translate(0, 0) rotate(0deg) scale(1); }
+            33% { transform: translate(-4px, 3px) rotate(-4deg) scale(1.05); }
+            66% { transform: translate(4px, -2px) rotate(4deg) scale(0.95); }
+        }
+
+        @keyframes chestnutBounce2 {
+            0%, 100% { transform: translateY(0) rotate(0deg) scale(1); }
+            25% { transform: translateY(-3px) rotate(90deg) scale(1.1); }
+            75% { transform: translateY(-3px) rotate(270deg) scale(0.9); }
+        }
+
+        @keyframes treeWind2 {
+            0%, 100% { transform: rotate(0deg) scale(1); }
+            50% { transform: rotate(-2deg) scale(1.02); }
+        }
+
+        /* Animationen für Edelkastanie */
+        @keyframes leafFloat3 {
+            0%, 100% { transform: translate(0, 0) rotate(0deg); }
+            20% { transform: translate(3px, -2px) rotate(3deg); }
+            40% { transform: translate(-2px, 3px) rotate(-2deg); }
+            60% { transform: translate(4px, 1px) rotate(4deg); }
+            80% { transform: translate(-3px, -1px) rotate(-3deg); }
+        }
+
+        @keyframes chestnutBounce3 {
+            0%, 100% { transform: translateY(0) rotate(0deg); }
+            33% { transform: translateY(-5px) rotate(120deg); }
+            66% { transform: translateY(-5px) rotate(240deg); }
+        }
+
+        @keyframes treeWind3 {
+            0%, 100% { transform: rotate(0deg) translateX(0); }
+            25% { transform: rotate(2deg) translateX(2px); }
+            50% { transform: rotate(0deg) translateX(0); }
+            75% { transform: rotate(-2deg) translateX(-2px); }
+        }
+
+        .animated-leaf-1 {
+            animation: leafFloat1 3.5s ease-in-out infinite;
+        }
+
+        .animated-chestnut-1 {
+            animation: chestnutBounce1 2.5s ease-in-out infinite;
+        }
+
+        .animated-tree-1 {
+            animation: treeWind1 4s ease-in-out infinite;
+        }
+
+        .animated-leaf-2 {
+            animation: leafFloat2 3s ease-in-out infinite;
+        }
+
+        .animated-chestnut-2 {
+            animation: chestnutBounce2 2s ease-in-out infinite;
+        }
+
+        .animated-tree-2 {
+            animation: treeWind2 3.5s ease-in-out infinite;
+        }
+
+        .animated-leaf-3 {
+            animation: leafFloat3 4s ease-in-out infinite;
+        }
+
+        .animated-chestnut-3 {
+            animation: chestnutBounce3 3s ease-in-out infinite;
+        }
+
+        .animated-tree-3 {
+            animation: treeWind3 5s ease-in-out infinite;
+        }
+
+        @media (max-width: 768px) {
+            .tree-content {
+                grid-template-columns: 1fr;
+            }
+            
+            h1 {
+                font-size: 2.5em;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>🌰 Kastanienbäume 🌰</h1>
+    </header>
+
+    <div class="container">
+        <div class="intro">
+            <h2>Willkommen in der Welt der Kastanienbäume</h2>
+            <p>Kastanienbäume gehören zu den bekanntesten und beliebtesten Bäumen in Europa. Mit ihren prächtigen Blüten und charakteristischen Früchten sind sie ein wichtiger Bestandteil unserer Natur und Kultur. Hier erfahren Sie alles über die wichtigsten Arten und ihre Erkennungsmerkmale.</p>
+        </div>
+
+        <!-- Rosskastanie -->
+        <div class="tree-card">
+            <h2>🌳 Gewöhnliche Rosskastanie (Aesculus hippocastanum)</h2>
+            
+            <div class="tree-content">
+                <div class="tree-info">
+                    <h3>Erkennungsmerkmale:</h3>
+                    <ul>
+                        <li><strong>Blätter:</strong> 5-7 fingerförmig angeordnete Teilblätter, handförmig gefiedert</li>
+                        <li><strong>Blüten:</strong> Weiße Blütenkerzen mit roten und gelben Flecken (Mai)</li>
+                        <li><strong>Früchte:</strong> Stachelige grüne Kapseln mit 1-3 glänzend braunen Samen</li>
+                        <li><strong>Rinde:</strong> Graubraun, schuppig, im Alter netzartig gefeldert</li>
+                        <li><strong>Wuchs:</strong> Mächtiger Baum, bis 25-30m hoch, breite Krone</li>
+                    </ul>
+
+                    <div class="data-table">
+                        <h3>Botanische Daten</h3>
+                        <div class="data-row">
+                            <div class="data-label">Familie:</div>
+                            <div>Seifenbaumgewächse</div>
+                        </div>
+                        <div class="data-row">
+                            <div class="data-label">Höhe:</div>
+                            <div>25-30 Meter</div>
+                        </div>
+                        <div class="data-row">
+                            <div class="data-label">Alter:</div>
+                            <div>Bis 300 Jahre</div>
+                        </div>
+                        <div class="data-row">
+                            <div class="data-label">Blütezeit:</div>
+                            <div>Mai</div>
+                        </div>
+                        <div class="data-row">
+                            <div class="data-label">Herkunft:</div>
+                            <div>Balkan, eingeführt im 16. Jh.</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="tree-images">
+                    <div class="image-box">
+                        <h4>Frucht</h4>
+                        <div class="svg-container">
+                            <svg class="animated-chestnut-1" width="120" height="120" viewBox="0 0 120 120">
+                                <circle cx="60" cy="60" r="35" fill="#7CB342"/>
+                                <g stroke="#558B2F" stroke-width="2.5" fill="none">
+                                    <line x1="60" y1="25" x2="60" y2="12"/>
+                                    <line x1="78" y1="30" x2="88" y2="20"/>
+                                    <line x1="88" y1="42" x2="100" y2="35"/>
+                                    <line x1="95" y1="60" x2="108" y2="60"/>
+                                    <line x1="88" y1="78" x2="100" y2="85"/>
+                                    <line x1="78" y1="90" x2="88" y2="100"/>
+                                    <line x1="60" y1="95" x2="60" y2="108"/>
+                                    <line x1="42" y1="90" x2="32" y2="100"/>
+                                    <line x1="32" y1="78" x2="20" y2="85"/>
+                                    <line x1="25" y1="60" x2="12" y2="60"/>
+                                    <line x1="32" y1="42" x2="20" y2="35"/>
+                                    <line x1="42" y1="30" x2="32" y2="20"/>
+                                </g>
+                                <circle cx="60" cy="65" r="16" fill="#6D4C41"/>
+                                <ellipse cx="60" cy="63" rx="9" ry="11" fill="#8D6E63"/>
+                                <ellipse cx="60" cy="61" rx="5" ry="3" fill="#A1887F"/>
+                            </svg>
+                        </div>
+                        <p class="image-description">Große stachelige grüne Kapsel (3-4 cm Durchmesser) mit langen, kräftigen Stacheln. Enthält 1-3 glänzende, dunkelbraune Kastanien mit heller Basis.</p>
+                    </div>
+                    <div class="image-box">
+                        <h4>Blatt</h4>
+                        <div class="svg-container">
+                            <svg class="animated-leaf-1" width="140" height="140" viewBox="0 0 140 140">
+                                <g transform="translate(70, 70)">
+                                    <path d="M 0,-50 Q 5,-30 4,-10 Q 3,10 0,30 Q -3,10 -4,-10 Q -5,-30 0,-50" fill="#4CAF50" stroke="#2E7D32" stroke-width="2"/>
+                                    <path d="M 0,0 Q 15,-15 20,-38 Q 22,-25 21,-15 Q 20,-5 15,5 Z" fill="#66BB6A" stroke="#2E7D32" stroke-width="1.8"/>
+                                    <path d="M 0,0 Q 28,-5 38,-18 Q 35,-5 32,3 Q 27,10 18,8 Z" fill="#66BB6A" stroke="#2E7D32" stroke-width="1.8"/>
+                                    <path d="M 0,0 Q -15,-15 -20,-38 Q -22,-25 -21,-15 Q -20,-5 -15,5 Z" fill="#66BB6A" stroke="#2E7D32" stroke-width="1.8"/>
+                                    <path d="M 0,0 Q -28,-5 -38,-18 Q -35,-5 -32,3 Q -27,10 -18,8 Z" fill="#66BB6A" stroke="#2E7D32" stroke-width="1.8"/>
+                                    <line x1="0" y1="30" x2="0" y2="50" stroke="#8D6E63" stroke-width="4"/>
+                                    <line x1="0" y1="-30" x2="12" y2="-25" stroke="#2E7D32" stroke-width="1" opacity="0.5"/>
+                                    <line x1="0" y1="-30" x2="-12" y2="-25" stroke="#2E7D32" stroke-width="1" opacity="0.5"/>
+                                </g>
+                            </svg>
+                        </div>
+                        <p class="image-description">Handförmig gefiedert mit 5-7 Teilblättern (bis 25 cm breit). Die Teilblätter sind verkehrt eiförmig mit gesägtem Rand und laufen spitz zu.</p>
+                    </div>
+                    <div class="image-box full-tree">
+                        <h4>Gesamter Baum</h4>
+                        <div class="svg-container">
+                            <svg class="animated-tree-1" width="100%" height="280" viewBox="0 0 300 280">
+                                <rect x="0" y="0" width="300" height="280" fill="#E3F2FD"/>
+                                <ellipse cx="150" cy="240" rx="80" ry="15" fill="#81C784" opacity="0.3"/>
+                                <rect x="135" y="180" width="30" height="60" fill="#5D4037" rx="3"/>
+                                <path d="M 135,185 Q 130,170 135,155" stroke="#4E342E" stroke-width="2" fill="none"/>
+                                <ellipse cx="150" cy="110" rx="75" ry="70" fill="#4CAF50"/>
+                                <ellipse cx="120" cy="120" rx="50" ry="45" fill="#66BB6A"/>
+                                <ellipse cx="180" cy="115" rx="55" ry="50" fill="#66BB6A"/>
+                                <ellipse cx="150" cy="80" rx="60" ry="50" fill="#81C784"/>
+                                <g fill="#FFFFFF">
+                                    <circle cx="140" cy="100" r="3"/>
+                                    <circle cx="155" cy="95" r="3"/>
+                                    <circle cx="148" cy="110" r="3"/>
+                                    <circle cx="165" cy="105" r="3"/>
+                                    <circle cx="135" cy="115" r="3"/>
+                                </g>
+                            </svg>
+                        </div>
+                        <p class="image-description">Großer, majestätischer Baum mit breiter, runder Krone. Wächst bis 25-30 m hoch. Im Mai schmücken weiße Blütenkerzen die gesamte Krone.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Rotblühende Rosskastanie -->
+        <div class="tree-card">
+            <h2>🌸 Rotblühende Rosskastanie (Aesculus × carnea)</h2>
+            
+            <div class="tree-content">
+                <div class="tree-info">
+                    <h3>Erkennungsmerkmale:</h3>
+                    <ul>
+                        <li><strong>Blätter:</strong> Ähnlich der Rosskastanie, 5-7 Teilblätter, meist etwas kleiner</li>
+                        <li><strong>Blüten:</strong> Rosa bis rote Blütenrispen (Mai-Juni)</li>
+                        <li><strong>Früchte:</strong> Leicht stachelige Kapseln, kleiner als bei der Rosskastanie</li>
+                        <li><strong>Rinde:</strong> Graubraun, glatter als Rosskastanie</li>
+                        <li><strong>Wuchs:</strong> Mittelgroßer Baum, 15-20m, dichtere Krone</li>
+                    </ul>
+
+                    <div class="data-table">
+                        <h3>Botanische Daten</h3>
+                        <div class="data-row">
+                            <div class="data-label">Familie:</div>
+                            <div>Seifenbaumgewächse</div>
+                        </div>
+                        <div class="data-row">
+                            <div class="data-label">Höhe:</div>
+                            <div>15-20 Meter</div>
+                        </div>
+                        <div class="data-row">
+                            <div class="data-label">Alter:</div>
+                            <div>Bis 150 Jahre</div>
+                        </div>
+                        <div class="data-row">
+                            <div class="data-label">Blütezeit:</div>
+                            <div>Mai-Juni</div>
+                        </div>
+                        <div class="data-row">
+                            <div class="data-label">Herkunft:</div>
+                            <div>Kreuzung (Hybrid), 1820 in Europa</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="tree-images">
+                    <div class="image-box">
+                        <h4>Frucht</h4>
+                        <div class="svg-container">
+                            <svg class="animated-chestnut-2" width="110" height="110" viewBox="0 0 110 110">
+                                <circle cx="55" cy="55" r="28" fill="#8BC34A"/>
+                                <g stroke="#689F38" stroke-width="2" fill="none">
+                                    <line x1="55" y1="27" x2="55" y2="20"/>
+                                    <line x1="68" y1="32" x2="74" y2="26"/>
+                                    <line x1="78" y1="43" x2="86" y2="40"/>
+                                    <line x1="83" y1="55" x2="90" y2="55"/>
+                                    <line x1="78" y1="67" x2="86" y2="70"/>
+                                    <line x1="68" y1="78" x2="74" y2="84"/>
+                                    <line x1="55" y1="83" x2="55" y2="90"/>
+                                    <line x1="42" y1="78" x2="36" y2="84"/>
+                                    <line x1="32" y1="67" x2="24" y2="70"/>
+                                    <line x1="27" y1="55" x2="20" y2="55"/>
+                                    <line x1="32" y1="43" x2="24" y2="40"/>
+                                    <line x1="42" y1="32" x2="36" y2="26"/>
+                                </g>
+                                <circle cx="55" cy="58" r="12" fill="#6D4C41"/>
+                                <ellipse cx="55" cy="56" rx="7" ry="9" fill="#8D6E63"/>
+                                <ellipse cx="55" cy="54" rx="4" ry="2" fill="#A1887F"/>
+                            </svg>
+                        </div>
+                        <p class="image-description">Kleinere Kapsel (2-3 cm) mit weniger und kürzeren Stacheln. Oft nur schwach bestachelt. Enthält meist nur 1-2 Kastanien.</p>
+                    </div>
+                    <div class="image-box">
+                        <h4>Blatt</h4>
+                        <div class="svg-container">
+                            <svg class="animated-leaf-2" width="130" height="130" viewBox="0 0 130 130">
+                                <g transform="translate(65, 65)">
+                                    <path d="M 0,-42 Q 4,-25 3,-8 Q 2,8 0,24 Q -2,8 -3,-8 Q -4,-25 0,-42" fill="#43A047" stroke="#2E7D32" stroke-width="1.8"/>
+                                    <path d="M 0,0 Q 13,-13 17,-32 Q 19,-22 18,-13 Q 17,-4 13,4 Z" fill="#66BB6A" stroke="#2E7D32" stroke-width="1.5"/>
+                                    <path d="M 0,0 Q 24,-4 32,-14 Q 30,-4 27,2 Q 23,7 16,6 Z" fill="#66BB6A" stroke="#2E7D32" stroke-width="1.5"/>
+                                    <path d="M 0,0 Q -13,-13 -17,-32 Q -19,-22 -18,-13 Q -17,-4 -13,4 Z" fill="#66BB6A" stroke="#2E7D32" stroke-width="1.5"/>
+                                    <path d="M 0,0 Q -24,-4 -32,-14 Q -30,-4 -27,2 Q -23,7 -16,6 Z" fill="#66BB6A" stroke="#2E7D32" stroke-width="1.5"/>
+                                    <line x1="0" y1="24" x2="0" y2="42" stroke="#8D6E63" stroke-width="3"/>
+                                    <line x1="0" y1="-25" x2="10" y2="-22" stroke="#2E7D32" stroke-width="0.8" opacity="0.5"/>
+                                    <line x1="0" y1="-25" x2="-10" y2="-22" stroke="#2E7D32" stroke-width="0.8" opacity="0.5"/>
+                                </g>
+                            </svg>
+                        </div>
+                        <p class="image-description">Ähnlich der Rosskastanie aber kompakter (bis 20 cm breit). 5-7 Teilblätter, oft dunkelgrüner und weniger stark gesägt.</p>
+                    </div>
+                    <div class="image-box full-tree">
+                        <h4>Gesamter Baum</h4>
+                        <div class="svg-container">
+                            <svg class="animated-tree-2" width="100%" height="280" viewBox="0 0 300 280">
+                                <rect x="0" y="0" width="300" height="280" fill="#FCE4EC"/>
+                                <ellipse cx="150" cy="245" rx="70" ry="12" fill="#81C784" opacity="0.3"/>
+                                <rect x="140" y="195" width="20" height="50" fill="#5D4037" rx="2"/>
+                                <path d="M 140,200 Q 138,190 140,180" stroke="#4E342E" stroke-width="1.5" fill="none"/>
+                                <ellipse cx="150" cy="130" rx="65" ry="65" fill="#43A047"/>
+                                <ellipse cx="130" cy="135" rx="45" ry="42" fill="#66BB6A"/>
+                                <ellipse cx="170" cy="132" rx="48" ry="45" fill="#66BB6A"/>
+                                <ellipse cx="150" cy="105" rx="52" ry="48" fill="#81C784"/>
+                                <g fill="#F48FB1">
+                                    <ellipse cx="145" cy="120" rx="4" ry="6"/>
+                                    <ellipse cx="158" cy="115" rx="4" ry="6"/>
+                                    <ellipse cx="150" cy="130" rx="4" ry="6"/>
+                                    <ellipse cx="168" cy="125" rx="4" ry="6"/>
+                                    <ellipse cx="135" cy="132" rx="4" ry="6"/>
+                                    <ellipse cx="142" cy="108" rx="4" ry="6"/>
+                                </g>
+                            </svg>
+                        </div>
+                        <p class="image-description">Mittelgroßer, kompakter Baum (15-20 m) mit dichter, ovaler Krone. Rosa bis rote Blüten im Mai-Juni. Beliebter Zierbaum in Parks.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Edelkastanie -->
+        <div class="tree-card">
+            <h2>🌰 Edelkastanie / Esskastanie (Castanea sativa)</h2>
+            
+            <div class="tree-content">
+                <div class="tree-info">
+                    <h3>Erkennungsmerkmale:</h3>
+                    <ul>
+                        <li><strong>Blätter:</strong> Länglich-lanzettlich, 12-20cm lang, gesägter Rand</li>
+                        <li><strong>Blüten:</strong> Gelblich-weiße Kätzchen, sehr auffällig (Juni-Juli)</li>
+                        <li><strong>Früchte:</strong> Dicht stachelige Hüllen mit 1-3 essbaren Maronen</li>
+                        <li><strong>Rinde:</strong> Dunkelbraun, längs gefurcht, im Alter spiralförmig</li>
+                        <li><strong>Wuchs:</strong> Stattlicher Baum, bis 30m, oft gedrehter Stamm</li>
+                    </ul>
+
+                    <div class="data-table">
+                        <h3>Botanische Daten</h3>
+                        <div class="data-row">
+                            <div class="data-label">Familie:</div>
+                            <div>Buchengewächse</div>
+                        </div>
+                        <div class="data-row">
+                            <div class="data-label">Höhe:</div>
